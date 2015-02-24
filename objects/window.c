@@ -184,24 +184,6 @@ window_set_border_width(lua_State *L, int idx, int width)
     luaA_object_emit_signal(L, idx, "property::border_width", 0);
 }
 
-/** Set a window gap width.
- * \param L The Lua VM state.
- * \param idx The window index.
- * \param width The gap width.
- */
-void
-window_set_gap_width(lua_State *L, int idx, int width)
-{
-    window_t *window = luaA_checkudata(L, idx, &window_class);
-
-    if(width == window->gap_width || width < 0)
-        return;
-
-    window->gap_width = width;
-
-    luaA_object_emit_signal(L, idx, "property::gap_width", 0);
-}
-
 /** Get the window type.
  * \param L The Lua VM state.
  * \param window The window object.
@@ -473,17 +455,9 @@ luaA_window_set_border_width(lua_State *L, window_t *c)
     return 0;
 }
 
-static int
-luaA_window_set_gap_width(lua_State *L, window_t *c)
-{
-    window_set_gap_width(L, -3, luaL_checknumber(L, -1));
-    return 0;
-}
-
 LUA_OBJECT_EXPORT_PROPERTY(window, window_t, window, lua_pushnumber)
 LUA_OBJECT_EXPORT_PROPERTY(window, window_t, border_color, luaA_pushcolor)
 LUA_OBJECT_EXPORT_PROPERTY(window, window_t, border_width, lua_pushnumber)
-LUA_OBJECT_EXPORT_PROPERTY(window, window_t, gap_width, lua_pushnumber)
 
 void
 window_class_setup(lua_State *L)
@@ -523,14 +497,9 @@ window_class_setup(lua_State *L)
                             (lua_class_propfunc_t) luaA_window_set_border_width,
                             (lua_class_propfunc_t) luaA_window_get_border_width,
                             (lua_class_propfunc_t) luaA_window_set_border_width);
-    luaA_class_add_property(&window_class, "gap_width",
-                            (lua_class_propfunc_t) luaA_window_set_gap_width,
-                            (lua_class_propfunc_t) luaA_window_get_gap_width,
-                            (lua_class_propfunc_t) luaA_window_set_gap_width);
 
     signal_add(&window_class.signals, "property::border_color");
     signal_add(&window_class.signals, "property::border_width");
-    signal_add(&window_class.signals, "property::gap_width");
     signal_add(&window_class.signals, "property::buttons");
     signal_add(&window_class.signals, "property::opacity");
     signal_add(&window_class.signals, "property::struts");
