@@ -66,6 +66,8 @@ typedef enum
     color_t border_color; \
     /** Border width */ \
     uint16_t border_width; \
+    /** Gap width */ \
+    uint16_t gap_width; \
     /** The window type */ \
     window_type_t type;
 
@@ -81,6 +83,7 @@ void window_class_setup(lua_State *);
 
 void window_set_opacity(lua_State *, int, double);
 void window_set_border_width(lua_State *, int, int);
+void window_set_gap_width(lua_State *, int, int);
 int luaA_window_get_type(lua_State *, window_t *);
 int luaA_window_set_type(lua_State *, window_t *);
 uint32_t window_translate_type(window_type_t);
